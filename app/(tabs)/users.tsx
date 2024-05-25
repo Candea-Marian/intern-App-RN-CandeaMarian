@@ -1,10 +1,9 @@
 import { StyleSheet, Image, Text, View, TouchableOpacity } from 'react-native';
-
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import currentEnvironment from '@/constants/environment';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Checkbox from 'expo-checkbox';
 
 type Gender = 'female' | 'male' | '';
@@ -25,22 +24,22 @@ export default function TabTwoScreen() {
   const [gender, setGender] = useState<Gender>('');
   const [pageToGet, setPageToGet] = useState<number>(1);
 
-  const getUsers = async (page: number) => {
+  const getUsers = useCallback(async (page: number, gender: Gender) => {
+    const genderQuery = gender ? `&gender=${gender}` : '';
     const result = await fetch(
-      `${currentEnvironment.api.baseUrl}?results=5&gender=female&page=${String(page)}`,
+      `${currentEnvironment.api.baseUrl}?results=5${genderQuery}&page=${String(page)}`
     );
-    const usersResults = (await result.json()) as User[];
+    const data = await result.json();
+    const usersResults = data.results as User[];
 
     setUsers(oldUsers =>
       page === 1 ? usersResults : [...oldUsers, ...usersResults],
     );
-  };
+  }, []);
 
   useEffect(() => {
-    void (async () => {
-      await getUsers(pageToGet);
-    })();
-  }, []);
+    getUsers(pageToGet, gender);
+  }, [pageToGet, gender, getUsers]);
 
   return (
     <ParallaxScrollView
@@ -55,31 +54,34 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Users</ThemedText>
       </ThemedView>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={styles.checkboxContainer}>
         <Checkbox
           value={gender === 'female'}
           onValueChange={() => {
             setGender('female');
+            setPageToGet(1);
           }}
           color={gender === 'female' ? '#4630EB' : undefined}
         />
         <ThemedText>Female</ThemedText>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={styles.checkboxContainer}>
         <Checkbox
           value={gender === 'male'}
           onValueChange={() => {
             setGender('male');
+            setPageToGet(1);
           }}
           color={gender === 'male' ? '#f44336' : undefined}
         />
         <ThemedText>Male</ThemedText>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={styles.checkboxContainer}>
         <Checkbox
           value={gender === ''}
           onValueChange={() => {
             setGender('');
+            setPageToGet(1);
           }}
           color={gender === '' ? '#6a329f' : undefined}
         />
@@ -87,8 +89,8 @@ export default function TabTwoScreen() {
       </View>
       {users.length > 0
         ? users.map((user: User) => (
-            <Text key={user.login.uuid} style={{ color: 'white' }}>
-              {user.name.first} {user.name.last} {user.gender}{' '}
+            <Text key={user.login.uuid} style={styles.userText}>
+              {user.name.first} {user.name.last} {user.gender}
             </Text>
           ))
         : null}
@@ -98,7 +100,7 @@ export default function TabTwoScreen() {
           setPageToGet(v => v + 1);
         }}
       >
-        <Text style={{ color: 'white', textAlign: 'center' }}>Load More</Text>
+        <Text style={styles.loadMoreText}>Load More</Text>
       </TouchableOpacity>
     </ParallaxScrollView>
   );
@@ -113,22 +115,33 @@ const styles = StyleSheet.create({
     right: 0,
     position: 'absolute',
   },
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+    margin: 10,
   },
-  loadMoree: {
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+  },
+  userText: {
+    color: 'white',
+    margin: 10,
+  },
+  loadMore: {
     backgroundColor: 'black',
     padding: 14,
     borderRadius: 6,
+    margin: 10,
+  },
+  loadMoreText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
+
+
 
 // 1. The logo spills out of its designated area.
 // 2. TEC theme is not displayed on the header bar instead a green color is seen.
