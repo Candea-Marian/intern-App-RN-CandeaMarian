@@ -13,6 +13,7 @@ export default function HomeScreen() {
         <Image
           source={require('@/assets/images/logo.webp')}
           style={styles.logo}
+          resizeMode="contain"
         />
       }
     >
@@ -36,7 +37,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   logo: {
-    height: '100%',
+    height: '70%',
+    width: '100%',
     bottom: 0,
     left: 0,
     right: 0,
