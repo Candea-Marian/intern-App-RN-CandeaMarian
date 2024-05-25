@@ -1,4 +1,4 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, useColorScheme } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,9 +6,11 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme();
+
+  
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#a4c991', dark: '#a4c991' }}
       headerImage={
         <Image
           source={require('@/assets/images/logo.webp')}

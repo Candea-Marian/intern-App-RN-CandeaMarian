@@ -44,7 +44,6 @@ export default function TabTwoScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#a4c991', dark: '#a4c991' }}
       headerImage={
         <Image
           source={require('@/assets/images/logo.webp')}
@@ -72,7 +71,7 @@ export default function TabTwoScreen() {
           onValueChange={() => {
             setGender('male');
           }}
-          color={gender === 'male' ? '#4630EB' : undefined}
+          color={gender === 'male' ? '#f44336' : undefined}
         />
         <ThemedText>Male</ThemedText>
       </View>
@@ -82,7 +81,7 @@ export default function TabTwoScreen() {
           onValueChange={() => {
             setGender('');
           }}
-          color={gender === '' ? '#4630EB' : undefined}
+          color={gender === '' ? '#6a329f' : undefined}
         />
         <ThemedText>All</ThemedText>
       </View>
