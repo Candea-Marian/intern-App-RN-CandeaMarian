@@ -49,6 +49,7 @@ export default function TabTwoScreen() {
         <Image
           source={require('@/assets/images/logo.webp')}
           style={styles.logo}
+          resizeMode="contain"
         />
       }
     >
@@ -106,7 +107,8 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   logo: {
-    height: '100%',
+    height: '70%',
+    width: '100%',
     bottom: 0,
     left: 0,
     right: 0,
