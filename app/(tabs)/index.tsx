@@ -34,7 +34,7 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.stepContainer}>
           {data.map((item, index) => (
             <Collapsible key={index} title={item.title}>
-              <ThemedText>{item.description}</ThemedText>
+              {item.description}
             </Collapsible>
           ))}
         </ScrollView>

@@ -1,38 +1,93 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React, {Fragment, PropsWithChildren, useState} from 'react';
-import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
-
+import React, { Fragment, PropsWithChildren, useState, useEffect } from 'react';
+import { StyleSheet, TouchableOpacity, TextInput, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from 'react-native-elements';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
-export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
+export function Collapsible({
+  children,
+  title,
+}: PropsWithChildren<{ title: string }>) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableTitle, setEditableTitle] = useState(title);
+  const [editableDescription, setEditableDescription] = useState('');
   const cardBackgroundColor = useThemeColor('background');
+  const textColor = useThemeColor('text');
+
+  useEffect(() => {
+    if (children && typeof children === 'string') {
+      setEditableDescription(children);
+    } else {
+      const childArray = React.Children.toArray(children);
+      setEditableDescription(
+        childArray
+          .map(child => (typeof child === 'string' ? child : ''))
+          .join(''),
+      );
+    }
+  }, [children]);
+
+  const handleEditToggle = () => {
+    setIsEditing(prev => !prev);
+  };
 
   return (
     <Fragment>
-      <Card containerStyle={[styles.card, {backgroundColor: cardBackgroundColor}]}>
-        
+      <Card
+        containerStyle={[styles.card, { backgroundColor: cardBackgroundColor }]}
+      >
         <TouchableOpacity
-            style={styles.heading}
-            onPress={() => setIsOpen((value) => !value)}
-            activeOpacity={0.8}>
+          style={styles.heading}
+          onPress={() => setIsOpen(!isOpen)}
+          activeOpacity={0.8}
+        >
+          <Ionicons
+            name={isOpen ? 'chevron-down' : 'chevron-forward-outline'}
+            size={20}
+            color={useThemeColor('icon')}
+          />
+          {isEditing ? (
+            <TextInput
+              style={[styles.editableTitle, { color: textColor }]}
+              value={editableTitle}
+              onChangeText={setEditableTitle}
+            />
+          ) : (
+            <ThemedText type="defaultSemiBold">{editableTitle}</ThemedText>
+          )}
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={handleEditToggle}
+            activeOpacity={0.8}
+          >
             <Ionicons
-              name={isOpen ? 'chevron-down' : 'chevron-forward-outline'}
+              name={isEditing ? 'checkmark' : 'create'}
               size={20}
               color={useThemeColor('icon')}
             />
-            <ThemedText type="defaultSemiBold">{title}</ThemedText>
           </TouchableOpacity>
-        
+        </TouchableOpacity>
+
         <Card.Divider />
 
-        {isOpen && <Card.FeaturedSubtitle><ThemedView style={styles.content}>{children}</ThemedView> </Card.FeaturedSubtitle>}
-        
+        {isOpen && (
+          <ThemedView style={styles.content}>
+            {isEditing ? (
+              <TextInput
+                style={[styles.editableDescription, { color: textColor }]}
+                value={editableDescription}
+                onChangeText={setEditableDescription}
+                multiline
+              />
+            ) : (
+              <ThemedText>{editableDescription}</ThemedText>
+            )}
+          </ThemedView>
+        )}
       </Card>
-
     </Fragment>
   );
 }
@@ -44,12 +99,31 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   content: {
-    marginTop: 6,
-    marginLeft: 24,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   card: {
     borderRadius: 10,
     padding: 0,
     margin: 0,
+  },
+  editableTitle: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    padding: 0,
+    margin: 0,
+  },
+  editableDescription: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    padding: 0,
+    margin: 0,
+  },
+  editButton: {
+    position: 'absolute',
+    right: 0,
   },
 });
