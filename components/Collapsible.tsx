@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from 'react-native-elements';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import currentEnvironment from '@/constants/environment';
 
 interface CollapsibleProps extends PropsWithChildren<{ title: string }> {
   onDelete: () => void;
@@ -21,6 +22,15 @@ export function Collapsible({
   const [editableDescription, setEditableDescription] = useState('');
   const cardBackgroundColor = useThemeColor('background');
   const textColor = useThemeColor('text');
+
+  //if children is null or undefined, it will become the value of the response from thre chuck norris api
+  useEffect(() => {
+    if (!children) {
+      fetch(currentEnvironment.chuck.baseUrl)
+        .then(response => response.json())
+        .then(data => setEditableDescription(data.value));
+    }
+  }, [children]);
 
   useEffect(() => {
     if (children && typeof children === 'string') {
@@ -61,7 +71,7 @@ export function Collapsible({
               onChangeText={setEditableTitle}
             />
           ) : (
-            <ThemedText type="defaultSemiBold">{editableTitle}</ThemedText>
+            <ThemedText style={styles.titleText}>{editableTitle}</ThemedText>
           )}
           <TouchableOpacity
             style={styles.editButton}
@@ -99,7 +109,7 @@ export function Collapsible({
                 multiline
               />
             ) : (
-              <ThemedText>{editableDescription}</ThemedText>
+              <ThemedText style={styles.descriptionText}>{editableDescription}</ThemedText>
             )}
           </ThemedView>
         )}
@@ -121,6 +131,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 10,
+    borderWidth: 1,
     padding: 0,
     margin: 0,
   },
@@ -130,6 +141,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     padding: 0,
     margin: 0,
+    fontSize: 20,
   },
   editableDescription: {
     flex: 1,
@@ -137,13 +149,21 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     padding: 0,
     margin: 0,
+    fontSize: 17,
   },
   editButton: {
     position: 'absolute',
-    right: 30, // Adjust the position
+    right: 30, 
   },
   deleteButton: {
     position: 'absolute',
     right: 0,
+  },
+  titleText: {
+    fontSize: 20, 
+    fontWeight: 'bold', 
+  },
+  descriptionText: {
+    fontSize: 17, 
   },
 });
