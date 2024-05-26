@@ -5,6 +5,10 @@ import { ThemedView } from '@/components/ThemedView';
 import currentEnvironment from '@/constants/environment';
 import { useEffect, useState, useCallback } from 'react';
 import Checkbox from 'expo-checkbox';
+import {Avatar, ListItem } from 'react-native-elements';
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 type Gender = 'female' | 'male' | '';
 
@@ -16,6 +20,9 @@ type User = {
   name: {
     first: string;
     last: string;
+  };
+  picture: {
+    thumbnail: string;
   };
 };
 
@@ -64,8 +71,7 @@ export default function TabTwoScreen() {
           color={gender === 'female' ? '#4630EB' : undefined}
         />
         <ThemedText>Female</ThemedText>
-      </View>
-      <View style={styles.checkboxContainer}>
+      
         <Checkbox
           value={gender === 'male'}
           onValueChange={() => {
@@ -75,8 +81,7 @@ export default function TabTwoScreen() {
           color={gender === 'male' ? '#f44336' : undefined}
         />
         <ThemedText>Male</ThemedText>
-      </View>
-      <View style={styles.checkboxContainer}>
+      
         <Checkbox
           value={gender === ''}
           onValueChange={() => {
@@ -89,9 +94,35 @@ export default function TabTwoScreen() {
       </View>
       {users.length > 0
         ? users.map((user: User) => (
-            <Text key={user.login.uuid} style={styles.userText}>
-              {user.name.first} {user.name.last} {user.gender}
-            </Text>
+          <ListItem
+          key={user.login.uuid}
+          Component={TouchableScale}
+          friction={90}
+          tension={100}
+          activeScale={0.95}
+          linearGradientProps={{
+            colors: ['#00a7a7', '#141414'],
+            start: { x: 0, y: 0 },
+            end: { x: 1.1, y: 0},
+          }}
+          ViewComponent={LinearGradient}
+          bottomDivider
+        >
+          <Avatar rounded source={{ uri: user.picture.thumbnail }} />
+          <ListItem.Content>
+            <ListItem.Title style={{ color: 'white', fontWeight: 'bold' }}>
+              {user.name.first} {user.name.last}
+            </ListItem.Title>
+            <ListItem.Subtitle style={{ color: 'white' }}>
+              {user.gender}
+            </ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Chevron color="white" />
+        </ListItem>
+
+            //<Text key={user.login.uuid} style={styles.userText}>
+             // {user.name.first} {user.name.last} {user.gender}
+            //</Text>
           ))
         : null}
       <TouchableOpacity
@@ -119,11 +150,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     margin: 10,
+    justifyContent: 'center',
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     margin: 10,
+    gap: 10,
+    justifyContent: 'center',
   },
   userText: {
     color: 'white',

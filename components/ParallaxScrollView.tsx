@@ -10,7 +10,7 @@ import Animated, {
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
-const HEADER_HEIGHT = 250;
+const HEADER_HEIGHT = 100;
 
 type Props = PropsWithChildren<{
   headerImage: ReactElement;
@@ -25,7 +25,7 @@ export default function ParallaxScrollView({
   
   // Dynamically determine the background color based on the color scheme
   const headerBackgroundColor = useThemeColor(
-    'background'
+    'backgroundHeader',
   );
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
@@ -69,10 +69,12 @@ const styles = StyleSheet.create({
   },
   header: {
     height: HEADER_HEIGHT,  // Corrected header height
+    overflow: 'hidden',
   },
   content: {
     flex: 1,
     padding: 32,
     gap: 16,
+    overflow: 'hidden',
   },
 });

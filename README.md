@@ -19,11 +19,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 ### Mandatory tasks:
 - [x] The logo spills out of its designated area.
 - [x] TEC theme is not displayed on the header bar instead a green color is seen.
-- [ ] Users screen does not display any data.
-- [ ] Load more button style is not working.
-- [ ] Style issues are encountered on the page - style however you want.
-- [ ] Additional data is not displayed upon using "Load more" button.
-- [ ] Users are not filtered by gender and the list does not reset on change checkbox.
+- [x] Users screen does not display any data.
+- [x] Load more button style is not working.
+- [x] Style issues are encountered on the page - style however you want.
+- [x] Additional data is not displayed upon using "Load more" button.
+- [x] Users are not filtered by gender and the list does not reset on change checkbox.
 - [ ] No loading state is displayed when accessing "Users" component.
 - [ ] On home page user should be able to do the following actions with cards that contain 2 fields: Title and Description
 - [ ]     * See all the cards already added
