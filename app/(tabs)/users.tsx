@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
   },
   loadMoreText: {
     color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   loadingIndicator: {
