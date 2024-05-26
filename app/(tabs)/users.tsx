@@ -154,7 +154,7 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   logo: {
-    height: '70%',
+    height: '65%',
     width: '100%',
     bottom: 0,
     left: 0,
