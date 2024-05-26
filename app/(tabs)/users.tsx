@@ -1,14 +1,13 @@
-import { StyleSheet, Image, Text, View, TouchableOpacity } from 'react-native';
+import {StyleSheet, Image, Text, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import currentEnvironment from '@/constants/environment';
 import { useEffect, useState, useCallback } from 'react';
 import Checkbox from 'expo-checkbox';
-import {Avatar, ListItem } from 'react-native-elements';
+import { Avatar, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import { LinearGradient } from 'expo-linear-gradient';
-
 
 type Gender = 'female' | 'male' | '';
 
@@ -30,18 +29,24 @@ export default function TabTwoScreen() {
   const [users, setUsers] = useState<User[]>([]);
   const [gender, setGender] = useState<Gender>('');
   const [pageToGet, setPageToGet] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getUsers = useCallback(async (page: number, gender: Gender) => {
+    setLoading(true);
+
     const genderQuery = gender ? `&gender=${gender}` : '';
     const result = await fetch(
-      `${currentEnvironment.api.baseUrl}?results=5${genderQuery}&page=${String(page)}`
+      `${currentEnvironment.api.baseUrl}?results=5${genderQuery}&page=${String(page)}`,
     );
+
     const data = await result.json();
     const usersResults = data.results as User[];
 
     setUsers(oldUsers =>
       page === 1 ? usersResults : [...oldUsers, ...usersResults],
     );
+
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -61,7 +66,9 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Users</ThemedText>
       </ThemedView>
+
       <View style={styles.checkboxContainer}>
+
         <Checkbox
           value={gender === 'female'}
           onValueChange={() => {
@@ -71,7 +78,7 @@ export default function TabTwoScreen() {
           color={gender === 'female' ? '#4630EB' : undefined}
         />
         <ThemedText>Female</ThemedText>
-      
+
         <Checkbox
           value={gender === 'male'}
           onValueChange={() => {
@@ -81,7 +88,7 @@ export default function TabTwoScreen() {
           color={gender === 'male' ? '#f44336' : undefined}
         />
         <ThemedText>Male</ThemedText>
-      
+
         <Checkbox
           value={gender === ''}
           onValueChange={() => {
@@ -91,40 +98,48 @@ export default function TabTwoScreen() {
           color={gender === '' ? '#6a329f' : undefined}
         />
         <ThemedText>All</ThemedText>
-      </View>
-      {users.length > 0
-        ? users.map((user: User) => (
-          <ListItem
-          key={user.login.uuid}
-          Component={TouchableScale}
-          friction={90}
-          tension={100}
-          activeScale={0.95}
-          linearGradientProps={{
-            colors: ['#00a7a7', '#141414'],
-            start: { x: 0, y: 0 },
-            end: { x: 1.1, y: 0},
-          }}
-          ViewComponent={LinearGradient}
-          bottomDivider
-        >
-          <Avatar rounded source={{ uri: user.picture.thumbnail }} />
-          <ListItem.Content>
-            <ListItem.Title style={{ color: 'white', fontWeight: 'bold' }}>
-              {user.name.first} {user.name.last}
-            </ListItem.Title>
-            <ListItem.Subtitle style={{ color: 'white' }}>
-              {user.gender}
-            </ListItem.Subtitle>
-          </ListItem.Content>
-          <ListItem.Chevron color="white" />
-        </ListItem>
 
-            //<Text key={user.login.uuid} style={styles.userText}>
-             // {user.name.first} {user.name.last} {user.gender}
-            //</Text>
-          ))
-        : null}
+      </View>
+
+      {users.length > 0 &&
+        users.map((user: User) => (
+          <ListItem
+            key={user.login.uuid}
+            Component={TouchableScale}
+            friction={90}
+            tension={100}
+            activeScale={0.95}
+            linearGradientProps={{
+              colors: ['#00a7a7', '#141414'],
+              start: { x: 0, y: 0 },
+              end: { x: 1.1, y: 0 },
+            }}
+            ViewComponent={LinearGradient}
+            bottomDivider
+          >
+            <Avatar rounded source={{ uri: user.picture.thumbnail }} />
+            <ListItem.Content>
+              <ListItem.Title style={{ color: 'white', fontWeight: 'bold' }}>
+                {user.name.first} {user.name.last}
+              </ListItem.Title>
+              <ListItem.Subtitle style={{ color: 'white' }}>
+                {user.gender}
+              </ListItem.Subtitle>
+            </ListItem.Content>
+            <ListItem.Chevron color="white" />
+          </ListItem>
+
+          //<Text key={user.login.uuid} style={styles.userText}>
+          // {user.name.first} {user.name.last} {user.gender}
+          //</Text>
+        ))}
+      {loading && (
+        <ActivityIndicator
+          size="large"
+          color="#00a7a7"
+          style={styles.loadingIndicator}
+        />
+      )}
       <TouchableOpacity
         style={styles.loadMore}
         onPress={() => {
@@ -173,9 +188,10 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  loadingIndicator: {
+    marginVertical: 20,
+  },
 });
-
-
 
 // 1. The logo spills out of its designated area.
 // 2. TEC theme is not displayed on the header bar instead a green color is seen.
