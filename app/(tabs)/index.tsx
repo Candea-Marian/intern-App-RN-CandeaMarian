@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { Image, StyleSheet, useColorScheme, ScrollView } from 'react-native';
-
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -7,15 +7,20 @@ import { ThemedView } from '@/components/ThemedView';
 import { Collapsible } from '@/components/Collapsible';
 
 export default function HomeScreen() {
-  const colorScheme = useColorScheme();
-
-  const data = [
-    { title: 'Card 1', description: 'This is the description for card 1' },
-    { title: 'Card 2', description: 'This is the description for card 2' },
-    { title: 'Card 3', description: 'This is the description for card 3' },
+  
+  const initialData = [
+    { id: 1, title: 'Card 1', description: 'This is the description for card 1' },
+    { id: 2, title: 'Card 2', description: 'This is the description for card 2' },
+    { id: 3, title: 'Card 3', description: 'This is the description for card 3' },
     // Add more cards as needed
   ];
-  
+
+  const [data, setData] = useState(initialData);
+
+  const handleDelete = (id:number) => {
+    setData(prevData => prevData.filter(item => item.id !== id));
+  };
+
   return (
     <ParallaxScrollView
       headerImage={
@@ -32,8 +37,12 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ScrollView contentContainerStyle={styles.stepContainer}>
-          {data.map((item, index) => (
-            <Collapsible key={index} title={item.title}>
+          {data.map((item) => (
+            <Collapsible
+              key={item.id}
+              title={item.title}
+              onDelete={() => handleDelete(item.id)}
+            >
               {item.description}
             </Collapsible>
           ))}

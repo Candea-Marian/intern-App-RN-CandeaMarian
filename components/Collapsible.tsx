@@ -6,10 +6,15 @@ import { ThemedView } from '@/components/ThemedView';
 import { Card } from 'react-native-elements';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
+interface CollapsibleProps extends PropsWithChildren<{ title: string }> {
+  onDelete: () => void;
+}
+
 export function Collapsible({
   children,
   title,
-}: PropsWithChildren<{ title: string }>) {
+  onDelete,
+}: CollapsibleProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editableTitle, setEditableTitle] = useState(title);
@@ -69,6 +74,17 @@ export function Collapsible({
               color={useThemeColor('icon')}
             />
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={onDelete}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="trash"
+              size={20}
+              color={useThemeColor('icon')}
+            />
+          </TouchableOpacity>
         </TouchableOpacity>
 
         <Card.Divider />
@@ -123,6 +139,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   editButton: {
+    position: 'absolute',
+    right: 30, // Adjust the position
+  },
+  deleteButton: {
     position: 'absolute',
     right: 0,
   },
