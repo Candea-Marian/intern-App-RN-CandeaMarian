@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { Fragment, PropsWithChildren, useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, TextInput, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from 'react-native-elements';
@@ -22,18 +22,14 @@ export function Collapsible({
   const [editableDescription, setEditableDescription] = useState('');
   const cardBackgroundColor = useThemeColor('background');
   const textColor = useThemeColor('text');
+  const iconColor = useThemeColor('icon');
 
-  //if children is null or undefined, it will become the value of the response from thre chuck norris api
   useEffect(() => {
     if (!children) {
       fetch(currentEnvironment.chuck.baseUrl)
         .then(response => response.json())
         .then(data => setEditableDescription(data.value));
-    }
-  }, [children]);
-
-  useEffect(() => {
-    if (children && typeof children === 'string') {
+    } else if (typeof children === 'string') {
       setEditableDescription(children);
     } else {
       const childArray = React.Children.toArray(children);
@@ -49,6 +45,29 @@ export function Collapsible({
     setIsEditing(prev => !prev);
   };
 
+  const handleEmojify = () => {
+    const textToEmojify = editableDescription;
+    const clientId = 'fa67b88b7f34e42df9e632423ba0cc665c8f993c054a'; // be careful with this, I only have 100 credits
+
+    console.log('Text to emojify:', textToEmojify);
+
+    fetch(`${currentEnvironment.emoji.baseUrl}?text=${encodeURIComponent(textToEmojify)}&client_id=${clientId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Emojified text:', data);
+        setEditableDescription(data.text); // Update here
+      })
+      .catch(error => {
+        console.error('Error fetching emojified text:', error);
+        setEditableDescription('Error fetching emojified text');
+      });
+  };
+
   return (
     <Fragment>
       <Card
@@ -62,7 +81,7 @@ export function Collapsible({
           <Ionicons
             name={isOpen ? 'chevron-down' : 'chevron-forward-outline'}
             size={20}
-            color={useThemeColor('icon')}
+            color={iconColor}
           />
           {isEditing ? (
             <TextInput
@@ -71,7 +90,7 @@ export function Collapsible({
               onChangeText={setEditableTitle}
             />
           ) : (
-            <ThemedText style={styles.titleText}>{editableTitle}</ThemedText>
+            <ThemedText style={[styles.titleText, { color: textColor }]}>{editableTitle}</ThemedText>
           )}
           <TouchableOpacity
             style={styles.editButton}
@@ -81,7 +100,7 @@ export function Collapsible({
             <Ionicons
               name={isEditing ? 'checkmark' : 'create'}
               size={20}
-              color={useThemeColor('icon')}
+              color={iconColor}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -92,7 +111,18 @@ export function Collapsible({
             <Ionicons
               name="trash"
               size={20}
-              color={useThemeColor('icon')}
+              color={iconColor}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.emojifyButton}
+            onPress={handleEmojify}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="happy-outline"
+              size={20}
+              color={iconColor}
             />
           </TouchableOpacity>
         </TouchableOpacity>
@@ -109,7 +139,7 @@ export function Collapsible({
                 multiline
               />
             ) : (
-              <ThemedText style={styles.descriptionText}>{editableDescription}</ThemedText>
+              <ThemedText style={[styles.descriptionText, { color: textColor }]}>{editableDescription}</ThemedText>
             )}
           </ThemedView>
         )}
@@ -128,12 +158,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
   card: {
     borderRadius: 10,
     borderWidth: 1,
     padding: 0,
-    margin: 0,
+    margin: 10,
   },
   editableTitle: {
     flex: 1,
@@ -153,17 +184,21 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: 'absolute',
-    right: 30, 
+    right: 90,
   },
   deleteButton: {
     position: 'absolute',
-    right: 0,
+    right: 60,
+  },
+  emojifyButton: {
+    position: 'absolute',
+    right: 30,
   },
   titleText: {
-    fontSize: 20, 
-    fontWeight: 'bold', 
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   descriptionText: {
-    fontSize: 17, 
+    fontSize: 17,
   },
 });

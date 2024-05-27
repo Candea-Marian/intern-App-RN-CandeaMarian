@@ -6,6 +6,10 @@ export type Environment = {
   chuck: {
     baseUrl: string;
   };
+
+  emoji: {
+    baseUrl: string;
+  };
 };
 
 const development: Environment = {
@@ -15,6 +19,10 @@ const development: Environment = {
 
   chuck: {
     baseUrl: 'https://api.chucknorris.io/jokes/random',
+  },
+
+  emoji: {
+    baseUrl: 'https://api.ritekit.com/v1/emoji/auto-emojify',
   },
   
 };
