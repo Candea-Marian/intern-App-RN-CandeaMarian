@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
-  useColorScheme,
   ScrollView,
   TouchableOpacity,
   View,
@@ -129,8 +128,8 @@ export default function HomeScreen() {
               multiline
             />
             <View style={[styles.modalButtons]}>
-              <Button color={useThemeColor('background')} title="Add" onPress={handleAddNewCard} />
-              <Button color={useThemeColor('background')} title="Cancel" onPress={() => setModalVisible(false)} />
+              <Button color={useThemeColor('backgroundHeader')} title="Add" onPress={handleAddNewCard} />
+              <Button color={useThemeColor('backgroundHeader')} title="Cancel" onPress={() => setModalVisible(false)} />
             </View>
           </View>
         </View>

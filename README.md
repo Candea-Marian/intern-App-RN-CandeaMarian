@@ -25,11 +25,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 - [x] Additional data is not displayed upon using "Load more" button.
 - [x] Users are not filtered by gender and the list does not reset on change checkbox.
 - [x] No loading state is displayed when accessing "Users" component.
-- [ ] On home page user should be able to do the following actions with cards that contain 2 fields: Title and Description
--  - [ ] See all the cards already added
--  - [ ] Add a card
--  - [ ] Update a card
--  - [ ] Delete a card
+- [x] On home page user should be able to do the following actions with cards that contain 2 fields: Title and Description
+-  - [x] See all the cards already added
+-  - [x] Add a card
+-  - [x] Update a card
+-  - [x] Delete a card
 - [ ] Use the phone camera to take a picture and show it on the home screen.
 
 

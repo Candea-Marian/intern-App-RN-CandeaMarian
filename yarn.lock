@@ -3747,6 +3747,13 @@ expo-asset@~10.0.6:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
+expo-camera@~15.0.9:
+  version "15.0.9"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-15.0.9.tgz#a6a175638bdd9914aca061c6090001452329fcea"
+  integrity sha512-xH+y8gA/3rNLostIw+z4kDGA+AYzsI9+QYb7G1uCFyxr3SxUGhapz+oMBFDU++vmyo9G7Ax0n52nghqIrNBJxQ==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-checkbox@~3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/expo-checkbox/-/expo-checkbox-3.0.0.tgz"
