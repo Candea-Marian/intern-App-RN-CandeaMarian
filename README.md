@@ -32,6 +32,13 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 -  - [x] Delete a card
 - [x] Use the phone camera to take a picture and show it on the home screen.
 
+## Aditional Cool Features (Because Why Not? 😎):
+ - Automatic Description Generation: If a card is created with an empty description, the app calls an API to fill it with a random Chuck Norris fact. Because Chuck Norris always knows what to say! 🥋💬
+
+ - Emoji Magic: Hit the "Add Emojis" button, and an API will sprinkle some emoji magic into your descriptions. 🎉✨ Whether it’s happy, sad, or something in between, there’s an emoji for that.
+
+ - Stylish Users List: The users list now looks as sleek as the new Android Studio. Modern, intuitive, and easy on the eyes. 😎
+
 ## Video presentation
 ### - Turn on the audio for a more pleasurable experience 🎧 
 
