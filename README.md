@@ -30,6 +30,6 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 -  - [x] Add a card
 -  - [x] Update a card
 -  - [x] Delete a card
-- [ ] Use the phone camera to take a picture and show it on the home screen.
+- [x] Use the phone camera to take a picture and show it on the home screen.
 
 
