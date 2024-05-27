@@ -32,4 +32,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 -  - [x] Delete a card
 - [x] Use the phone camera to take a picture and show it on the home screen.
 
+## Video presentation
+
+https://github.com/Candea-Marian/intern-App-RN-CandeaMarian/assets/56280373/88870b81-9491-4457-8611-093323922f9f
+
 
